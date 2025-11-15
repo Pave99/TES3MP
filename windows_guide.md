@@ -61,5 +61,27 @@ Download Strawberry Perl from [their website](https://strawberryperl.com/)\
 Download Ruby installer from [rubyinstaller.com](https://rubyinstaller.org/downloads/)\
 Download the latest Qt5 from [Qt5_archive](https://download.qt.io/archive/qt/)
 
-
 Create a separate build folder for Qt5. Consider downloading [jom](https://wiki.qt.io/Jom) to make the building phase use more than one core. Use this command to skip the building of unneeded qt5 components``` [path_to_qt5_src]\configure -prefix D:\tes3mp\bin\qt5 -opensource -nomake tests -nomake examples -skip qtwebengine -skip qtdeclarative -skip qtsvg -skip qtmultimedia -skip qtquickcontrols -skip qtquickcontrols2 -skip qtserialport -skip qtspeech -skip qtlocation ```
+
+### FFmpeg
+Building FFmpeg on Windows requires MSYS2. Check this [ffmpeg document](https://www.ffmpeg.org/platform.html#Windows) and this [Qt document](https://doc.qt.io/qt-6/qtmultimedia-building-ffmpeg-windows.html) for more information. Clone Ffmpeg repo from Github using ```git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg```
+
+Normal installation routine is:
+
+1. Open VS x64 Development Prompt
+2. Navigate to your msys installation folder
+3. Rename ```usr/bin/link.exe``` to something else, so it won't clash with the VS linker
+4. Run ```msys2-shell -use-full-path```
+5. Install necessary packages:
+```
+pacman -Syu
+pacman -S make
+pacman -S diffutils
+pacman -S nasm
+```
+6. Navigate to FFmpeg folder (I just symlinked the tes3mp folder to home)
+7. Make a new FFmpeg build folder
+8. run ```[path_to_ffmpeg_source]/configure --prefix=[path_to_ffmpeg_bin] --disable-doc --enable-shared --disable-programs --toolchain=msvc --arch=x86_64 --target-os=win64 --extra-cflags="-I[path_to_zlib]/zlib/include/" --extra-ldflags="-LIBPATH:[path_to_zlib]../bin/zlib/Release ```
+   Don't worry if the ARCH is x86 after configuring, all of the x86 architectures get merged to one x86 in configure (source: [stackoverflow](https://stackoverflow.com/questions/57281055/ffmpeg-compilation-with-arch-x86-64-always-compiles-with-x86)). You can check afterwards if the compiled dlls are 64 bit using this [notepad++ trick](https://www.greytrix.com/blogs/sageaccpacerp/2022/01/18/how-to-check-dll-is-32-bit-or-64-bit/).
+9. ```make && make install```
+
