@@ -1,5 +1,5 @@
 # Build guide for Windows systems
-Based on [this old Steam guide](https://steamcommunity.com/groups/mwmulti/discussions/1/343788552545812491) and [this OpenMW build guide](https://wiki.openmw.org/index.php?title=Development_Environment_Setup) and [this old OpenMW build guide](https://wiki.openmw.org/index.php?title=Development_Environment_Setup&oldid=6337).
+Based on [this old Steam guide](https://steamcommunity.com/groups/mwmulti/discussions/1/343788552545812491) and [this OpenMW build guide](https://wiki.openmw.org/index.php?title=Development_Environment_Setup) and [this old OpenMW build guide](https://wiki.openmw.org/index.php?title=Development_Environment_Setup&oldid=6337) and [this OpenMW build guide](https://wiki.openmw.org/index.php?title=User:Gblues).
 
 ## Requirements
 - Visual Studio (Boost requires additional MSVC v141 - VS 2017 C++ x64/x86 build tools (v14.16)) check [this github issue](https://github.com/boostorg/boost/issues/914)
@@ -38,7 +38,7 @@ Download zlib from [zlib.net](https://zlib.net) and compile it using CMake and V
 Download libpng from [sourceforge](https://gnuwin32.sourceforge.net/packages/libpng.htm) and compile it.
 
 __LIBCOLLADA__\
-Download boost from [boost github](https://github.com/boostorg/boost/releases) and compile it. Remember to check shared build in CMake.\
+Download boost from [boost github](https://github.com/boostorg/boost/releases) and compile it. Remember to check shared build and zlib in CMake.\
 Download libxml from [GNOME gitlab](https://gitlab.gnome.org/GNOME/libxml2/-/releases) and compile it.\
 Clone collada-dom from [github repo](https://github.com/rdiankov/collada-dom) \
 Change in dae.h line 28 and daeUtils.cpp line 21 ```#include <boost/filesystem/convenience.hpp>``` to ```#include <boost/filesystem/operations.hpp>``` and compile it.
@@ -85,3 +85,25 @@ pacman -S nasm
    Don't worry if the ARCH is x86 after configuring, all of the x86 architectures get merged to one x86 in configure (source: [stackoverflow](https://stackoverflow.com/questions/57281055/ffmpeg-compilation-with-arch-x86-64-always-compiles-with-x86)). You can check afterwards if the compiled dlls are 64 bit using this [notepad++ trick](https://www.greytrix.com/blogs/sageaccpacerp/2022/01/18/how-to-check-dll-is-32-bit-or-64-bit/).
 9. ```make && make install```
 
+### Bullet
+Clone Bullet [repo](https://github.com/bulletphysics/bullet3)\
+In CMake uncheck the following options:
+- BUILD_BULLET2_DEMOS
+- BUILD_BULLET3
+- BUILD_CPU_DEMOS
+- BUILD_EXTRAS
+- BUILD_OPENGL3_DEMOS
+- BUILD_UNIT_TESTS
+And check these:
+- INSTALL_LIBS
+- USE_MSVC_RUNTIME_LIBRARY_DLL
+- USE_DOUBLE_PRECISION
+- BUILD_STATIC
+
+### MyGUI
+Requires Freetype and SDL2
+
+__Freetype__
+Download Freetype from [sourceforge](https://sourceforge.net/projects/freetype/files/) and compile it.\
+__SDL2__
+Clone the 2.32.x release branch from [Github](https://github.com/libsdl-org/SDL/tree/release-2.32.x) ```  git clone https://github.com/libsdl-org/SDL.git -b release-2.32.x ``` and compile it.
