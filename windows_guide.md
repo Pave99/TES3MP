@@ -19,7 +19,7 @@ Some of the libraries used here have very outdated sources which confuses CMake 
 
 These are harmless on modern CMake versions and can be fixed by editing the CMakeLists.txt file and increasing the minimum compatible version to a larger version, closer to the version you are using.
 
-Unless otherwise stated you'll need to build both Release and Debug versions of the library.
+Unless otherwise stated you'll need to build both Release and Debug versions of the libraries.
 
 ### OpenSceneGraph
 For OpenSceneGraphs dependencies, you can use the (now archived) prebuilt dependency archive for Visual Studio 2017 x64 referenced [here](https://openscenegraph.github.io/OpenSceneGraphDotComBackup/OpenSceneGraph/www.openscenegraph.com/index.php/download-section/32-third-party.html). It can be downloaded from [Internet Archive](https://web.archive.org/web/20240221120943if_/https://download.osgvisual.org/3rdParty_VS2017_v141_x64_V11_full.7z).
@@ -49,7 +49,7 @@ In CMake uncheck the following options:
 - BUILD_CPU_DEMOS
 - BUILD_EXTRAS
 - BUILD_OPENGL3_DEMOS
-- BUILD_UNIT_TESTS
+- BUILD_UNIT_TESTS\
 And check these:
 - INSTALL_LIBS
 - USE_MSVC_RUNTIME_LIBRARY_DLL
@@ -60,4 +60,73 @@ Download MyGUI 3.4.1 from [github releases](https://github.com/MyGUI/mygui/relea
 Point freetype to the osg 3rdparty folder.\
 Change MYGUI_RENDERSYSTEM to 1 and unselect all MYGUI_BUILD checkboxes. ([source](https://wiki.openmw.org/index.php?title=User:Gblues#MyGUI))
 
+### Boost
+Download Boost 1.74.0 binaries from [boost.org](https://www.boost.org/releases/1.74.0/). The file you need is ```boost_1_74_0-msvc-14.2-64.exe```.
+Install it to some place you'll find easily.
 
+### Luajit
+Clone Luajit from [luajit.org](https://luajit.org/download.html)\
+In your VS2017 x64 Development prompt, navigate to luajit/src and execute ```msvcbuild.bat```. This builds Luajit to the current folder. Copy all the header files to a new include folder and the libraries to a separate new folder.
+
+### OpenAL
+Download and install OpenAL 1.1 SDK from [openal.org](https://www.openal.org/downloads/)
+
+### SDL 2
+Clone the SDL 2 branch from github with ```git clone https://github.com/libsdl-org/SDL -b release-2.32.x``` and compile it.
+
+## TES3MP
+And now the hardest part: Trying to get everything to work happily with each other.\
+Start with cloning the TES3MP repo with ```git clone https://github.com/Pave99/TES3MP.git```\
+Open up the CMake and plug in the dependencies one by one after configuring each time.\
+These are some caveats in the dependencies I found in alphabetical order:
+
+__BOOST__
+
+For Boost libraries use the libboost-* variants that don't have 's' in their filenames, eg. 
+- Good: libboost_locale-vc142-mt-x64-1_74.lib and libboost_locale-vc142-mt-gd-x64-1_74.lib
+- Not good: libboost_locale-vc142-mt-___s___-x64-1_74.lib or libboost_locale-vc142-mt-___sgd___-x64-1_74.lib or *boost*_locale-vc142-mt-x64-1_74.lib or *boost*_locale-vc142-mt-gd-x64-1_74.lib
+
+__BULLET__
+
+If Bullet complains about double precision and you are absolutely certain that you enabled it before building, make sure that the ```BULLET_INCLUDE_DIR``` points to ```bullet/include/bullet```.
+
+__FFMPEG__
+
+All FFmpeg include folders should be ```ffmpeg-4.4.1/include``` and not the separate subfolders.
+
+__LZ4__
+
+LZ4 doesn't build separate debug library, so use the release library for both.
+
+__LUAJIT__
+
+For LUAJIT_LIBRARY use lua51.lib and not the luajit.lib.
+
+__OPENSCENEGRAPH__
+
+Also all OSG include dirs are plain /include/ folders without subfolders.
+
+__QT5__
+
+Qt5*_DIR arguments expect the cmake folder eg.```qt/5.12.12/msvc2017_64/lib/cmake/Qt5OpenGL```
+
+__RAKNET___
+
+Use the static Raknet libraries (RakNetLibStatic[d].lib) and not the *DLL.lib files.
+
+__SDL__
+
+TES3MP expects SDL include folder to be ```include/SDL2```
+
+### Rest of the CMake
+Finally after configuring all of the dependencies you can start configuring the TES3MP itself.\
+Uncheck unnecessary OpenMW bits such as:
+- BUILD_BSATOOL
+- BUILD_ESMTOOL
+- BUILD_ESSIMPORTER
+- BUILD_MWINIIMPORTER
+- BUILD_NIFTEST
+- BUILD_OPENCS
+
+Adjust the CMAKE_INSTALL_PREFIX, generate the MSVC project and start compiling with fingers crossed. If all goes well, you should have a fresh copy of TES3MP built. One thing to notice is that the CMake predefined ALL_INSTALL doesn't install all the files correctly.\
+At least tes3mp-server.exe could be found in Debug folder inside the CMake build folder.
