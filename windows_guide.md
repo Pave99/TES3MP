@@ -126,7 +126,8 @@ Uncheck unnecessary OpenMW bits such as:
 - BUILD_ESSIMPORTER
 - BUILD_MWINIIMPORTER
 - BUILD_NIFTEST
-- BUILD_OPENCS
+- BUILD_OPENCS\
+Make sure to check BUILD_OPENMW_MP as it makes building use multiple cores and creates the tes3mp-server.exe to the bin folder as well.
+
 
 Adjust the CMAKE_INSTALL_PREFIX, generate the MSVC project and start compiling with fingers crossed. If all goes well, you should have a fresh copy of TES3MP built. One thing to notice is that the CMake predefined ALL_INSTALL doesn't install all the files correctly.\
-At least tes3mp-server.exe could be found in Debug folder inside the CMake build folder.
