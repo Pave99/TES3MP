@@ -13,6 +13,16 @@ if(POLICY CMP0083)
   cmake_policy(SET CMP0083 NEW)
 endif()
 
+# for boost_root, remove if cmake version is >= 3.12
+if(POLICY CMP0074)
+	cmake_policy(SET CMP0074 NEW)
+endif()
+
+# for find_package(Boost). We use new behaviour because the boost version is newer than 1.70.
+if(POLICY CMP0167)
+	cmake_policy(SET CMP0167 NEW)
+endif()
+
 option(OPENMW_GL4ES_MANUAL_INIT "Manually initialize gl4es. This is more reliable on platforms without a windowing system. Requires gl4es to be configured with -DNOEGL=ON -DNO_LOADER=ON -DNO_INIT_CONSTRUCTOR=ON." OFF)
 if(OPENMW_GL4ES_MANUAL_INIT)
     add_definitions(-DOPENMW_GL4ES_MANUAL_INIT)
@@ -397,7 +407,7 @@ endif()
 IF(BUILD_OPENMW OR BUILD_OPENCS)
 # End of tes3mp addition
 if(OPENMW_USE_SYSTEM_OSG)
-    find_package(OpenSceneGraph 3.4.0 REQUIRED ${USED_OSG_COMPONENTS})
+    find_package(OpenSceneGraph 3.4.0 REQUIRED ${USED_OSG_COMPONENTS} )
     if (${OPENSCENEGRAPH_VERSION} VERSION_GREATER 3.6.2 AND ${OPENSCENEGRAPH_VERSION} VERSION_LESS 3.6.5)
         message(FATAL_ERROR "OpenSceneGraph version ${OPENSCENEGRAPH_VERSION} has critical regressions which cause crashes. Please upgrade to 3.6.5 or later. We strongly recommend using the tip of the official 'OpenSceneGraph-3.6' branch or the tip of '3.6' OpenMW/osg (OSGoS).")
     endif()
@@ -934,8 +944,10 @@ elseif(NOT APPLE)
         # Start of tes3mp addition
         INSTALL(FILES "${INSTALL_SOURCE}/tes3mp-client-default.cfg" DESTINATION ".")
         INSTALL(FILES "${INSTALL_SOURCE}/tes3mp-server-default.cfg" DESTINATION ".")
+	INSTALL(FILES "${INSTALL_SOURCE}/tes3mp-server.exe" DESTINATION ".")
         # End of tes3mp addition
         INSTALL(FILES "${INSTALL_SOURCE}/gamecontrollerdb.txt" DESTINATION ".")
+	
 
         INSTALL(DIRECTORY "${INSTALL_SOURCE}/resources" DESTINATION ".")
 

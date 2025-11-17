@@ -1,5 +1,10 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+#for fetchcontent_populate
+if(POLICY CMP0169)
+	cmake_policy(SET CMP0169 OLD)
+endif()
+
 # Like `FetchContent_MakeAvailable` but passes EXCLUDE_FROM_ALL to `add_subdirectory`.
 macro(FetchContent_MakeAvailableExcludeFromAll)
     foreach(contentName IN ITEMS ${ARGV})
@@ -183,6 +188,7 @@ if(NOT OPENMW_USE_SYSTEM_RECASTNAVIGATION)
 	URL https://github.com/recastnavigation/recastnavigation/archive/40ec6fcd6c0263a3d7798452aee531066072d15d.zip
         URL_HASH MD5=c329fce588fc5605a3ca2d2888dd39d5
         SOURCE_DIR fetched/recastnavigation
+		DOWNLOAD_EXTRACT_TIMESTAMP FALSE
     )
     FetchContent_MakeAvailableExcludeFromAll(recastnavigation)
 endif()
