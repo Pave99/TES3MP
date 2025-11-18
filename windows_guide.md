@@ -22,15 +22,16 @@ These are harmless on modern CMake versions and can be fixed by editing the CMak
 Unless otherwise stated you'll need to build both Release and Debug versions of the libraries.
 
 ### OpenSceneGraph
+
 For OpenSceneGraphs dependencies, you can use the (now archived) prebuilt dependency archive for Visual Studio 2017 x64 referenced [here](https://openscenegraph.github.io/OpenSceneGraphDotComBackup/OpenSceneGraph/www.openscenegraph.com/index.php/download-section/32-third-party.html). It can be downloaded from [Internet Archive](https://web.archive.org/web/20240221120943if_/https://download.osgvisual.org/3rdParty_VS2017_v141_x64_V11_full.7z).
 
 Clone OpenMW-optimized OpenScenegraph from [this repo](https://github.com/OpenMW/osg) and open the source in CMake.\
 Add these: ```-DBUILD_OSG_PLUGINS_BY_DEFAULT=0 -DBUILD_OSG_PLUGIN_OSG=1 -DBUILD_OSG_PLUGIN_DAE=1 -DBUILD_OSG_PLUGIN_DDS=1 -DBUILD_OSG_PLUGIN_TGA=1 -DBUILD_OSG_PLUGIN_BMP=1 -DBUILD_OSG_PLUGIN_JPEG=1 -DBUILD_OSG_PLUGIN_PNG=1 -DBUILD_OSG_PLUGIN_FREETYPE=1 -DBUILD_OSG_DEPRECATED_SERIALIZERS=0``` cmake arguments to avoid compilation of unneeded OSG plugins.\
 Make sure to adjust the 3rdparty argument to the right folder. CMake doesn't resolve all arguments correctly by itself, you'll need to point at least freetypes include and lib arguments and collada to the 3rdparty folder.\
-Not all libraries are found in the 3rdparty folder, but make sure CMake finds Freetype, COLLADA, JPEG, PNG and TIFF.
+Not all libraries are needed for TES3MP, but make sure CMake finds Freetype, COLLADA, JPEG, PNG and TIFF.
 
 ### Crabnet
-Clone [Crabnet](https://github.com/TES3MP/CrabNet) repo which is a fork of [Raknet](https://github.com/facebookarchive/RakNet) and compile it
+Clone [Crabnet](https://github.com/TES3MP/CrabNet) repo which is a fork of [Raknet](https://github.com/facebookarchive/RakNet) and compile it.
 
 ### LZ4
 Clone [LZ4](https://github.com/lz4/lz4) repo. Use build\cmake as the CMake source folder and compile it.
@@ -42,14 +43,15 @@ Download Qt5 5.12.12 binaries from [qt.io](https://download.qt.io/new_archive/qt
 Download FFmpeg 4.4.1 binaries from [github](https://github.com/GyanD/codexffmpeg/releases?q=4.4&expanded=true), specifically ```ffmpeg-4.4.1-full_build-shared.7z```
 
 ### Bullet
-Clone Bullet [repo](https://github.com/bulletphysics/bullet3)\
+Clone Bullet [repo](https://github.com/bulletphysics/bullet3).
 In CMake uncheck the following options:
 - BUILD_BULLET2_DEMOS
 - BUILD_BULLET3
 - BUILD_CPU_DEMOS
 - BUILD_EXTRAS
 - BUILD_OPENGL3_DEMOS
-- BUILD_UNIT_TESTS\
+- BUILD_UNIT_TESTS
+
 And check these:
 - INSTALL_LIBS
 - USE_MSVC_RUNTIME_LIBRARY_DLL
@@ -66,19 +68,20 @@ Install it to some place you'll find easily.
 
 ### Luajit
 Clone Luajit from [luajit.org](https://luajit.org/download.html)\
-In your VS2017 x64 Development prompt, navigate to luajit/src and execute ```msvcbuild.bat```. This builds Luajit to the current folder. Copy all the header files to a new include folder and the libraries to a separate new folder.
+In your VS2017 x64 Development prompt, navigate to luajit/src and execute ```msvcbuild.bat```. This builds Luajit to the current folder. Copy all the header files to a new include folder and everything else that was built to a new lib folder.
 
 ### OpenAL
-Download and install OpenAL 1.1 SDK from [openal.org](https://www.openal.org/downloads/)
+Download and install OpenAL 1.1 SDK from [openal.org](https://www.openal.org/downloads/).
 
 ### SDL 2
 Clone the SDL 2 branch from github with ```git clone https://github.com/libsdl-org/SDL -b release-2.32.x``` and compile it.
 
 ## TES3MP
+
 And now the hardest part: Trying to get everything to work happily with each other.\
 Start with cloning the TES3MP repo with ```git clone https://github.com/Pave99/TES3MP.git```\
 Open up the CMake and plug in the dependencies one by one after configuring each time.\
-These are some caveats in the dependencies I found in alphabetical order:
+I found these caveats in the dependencies, in alphabetical order:
 
 __BOOST__
 
@@ -110,7 +113,7 @@ __QT5__
 
 Qt5*_DIR arguments expect the cmake folder eg.```qt/5.12.12/msvc2017_64/lib/cmake/Qt5OpenGL```
 
-__RAKNET___
+__RAKNET__
 
 Use the static Raknet libraries (RakNetLibStatic[d].lib) and not the *DLL.lib files.
 
@@ -119,6 +122,7 @@ __SDL__
 TES3MP expects SDL include folder to be ```include/SDL2```
 
 ### Rest of the CMake
+
 Finally after configuring all of the dependencies you can start configuring the TES3MP itself.\
 Uncheck unnecessary OpenMW bits such as:
 - BUILD_BSATOOL
@@ -126,8 +130,46 @@ Uncheck unnecessary OpenMW bits such as:
 - BUILD_ESSIMPORTER
 - BUILD_MWINIIMPORTER
 - BUILD_NIFTEST
-- BUILD_OPENCS\
-Make sure to check BUILD_OPENMW_MP as it makes building use multiple cores and creates the tes3mp-server.exe to the bin folder as well.
+- BUILD_OPENCS
+  
+Make sure to check BUILD_OPENMW_MP as it makes building use multiple cores.
 
+Adjust the CMAKE_INSTALL_PREFIX, generate the MSVC project and start compiling with your fingers crossed. Make sure to not compile a debug version as it is not supported. Start with RelWithDebInfo version to get some debuggability. If all goes well, you should have a fresh copy of TES3MP built. 
 
-Adjust the CMAKE_INSTALL_PREFIX, generate the MSVC project and start compiling with fingers crossed. If all goes well, you should have a fresh copy of TES3MP built. One thing to notice is that the CMake predefined ALL_INSTALL doesn't install all the files correctly.\
+## Folder layout setup
+
+After compiling you should have a whole bunch of exes and pdb files in the CMAKE_INSTALL_PREFIX folder. Make a copy of that folder and call it something like tes3mp_release. To that folder you need to copy the dll files of those dependency libraries.\
+OSG: Copy all the non-debug dll files from bin folder as well as the whole osgPlugins folder. Copy also libpng16.dll from the 3rdparty/bin folder.\
+FFMPEG: Copy all dll files.\
+LUAJIT: Copy lua51.dll.\
+LZ4: Copy lz4.dll.\
+MyGUI: Copy the dll from the Release folder.\
+OpenAL: Install the openal redist from openal/redist.\
+QT: Copy Qt5Core.dll, Qt5Gui.dll and Qt5Widgets.dll from 5.12.12\msvc2017_64\bin. Create a platforms folder to the tes3mp release folder and copy 5.12.12\msvc2017_64\plugins\platforms\qwindows.dll there.\
+SDL: Copy SDL2.dll.\
+ZLIB: Copy zlib.dll from the osg/3rdparty/bin folder.
+
+## Server setup
+
+Oh we are not done yet.
+
+### Lua plugins
+
+For the server to work correctly it needs Lua-io2 plugin. Lua-cjson plugin is also recommended for performance improvement.
+
+___io2___\
+Clone io2 from [TES3MP repo](https://github.com/TES3MP/Lua-io2) and compile it. Make sure to use the same lua51.lib library as before.
+
+___cjson___\
+Clone my fork of the [TES3MP cjson repo](https://github.com/Pave99/lua-cjson), which fixes a missing dll export problem. It also needs the lua library as a dependency.
+
+Compiling these two should result in two dll files.
+
+### CoreScripts
+
+The server needs CoreScripts as its base. Create a folder called server inside the release folder. Clone the [CoreScripts repo](https://github.com/TES3MP/CoreScripts), and copy the files to the server folder (or clone the repo directly to the server folder). Copy the two aforementioned dlls to the lib folder of the server folder.
+
+# DONE!
+
+Now it's time to start the server and client and watch for any possible errors. If all goes well you should be greeted by the servers username prompt.
+
