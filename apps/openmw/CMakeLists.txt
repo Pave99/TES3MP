@@ -2,6 +2,7 @@
 set(GAME
     main.cpp
     engine.cpp
+    options.cpp
 
     ${CMAKE_SOURCE_DIR}/files/tes3mp/tes3mp.rc
     ${CMAKE_SOURCE_DIR}/files/tes3mp/tes3mp.exe.manifest
@@ -18,15 +19,16 @@ set(GAME_HEADER
 source_group(game FILES ${GAME} ${GAME_HEADER})
 
 add_openmw_dir (mwrender
-    actors objects renderingmanager animation rotatecontroller sky npcanimation vismask
+    actors objects renderingmanager animation rotatecontroller sky skyutil npcanimation vismask
     creatureanimation effectmanager util renderinginterface pathgrid rendermode weaponanimation screenshotmanager
-    bulletdebugdraw globalmap characterpreview camera viewovershoulder localmap water terrainstorage ripplesimulation
+    bulletdebugdraw globalmap characterpreview camera localmap water terrainstorage ripplesimulation
     renderbin actoranimation landmanager navmesh actorspaths recastmesh fogmanager objectpaging groundcover
+    postprocessor pingpongcull luminancecalculator pingpongcanvas transparentpass navmeshmode
     )
 
 add_openmw_dir (mwinput
     actions actionmanager bindingsmanager controllermanager controlswitch
-    inputmanagerimp mousemanager keyboardmanager sdlmappings sensormanager
+    inputmanagerimp mousemanager keyboardmanager sensormanager gyromanager
     )
 
 add_openmw_dir (mwgui
@@ -42,6 +44,7 @@ add_openmw_dir (mwgui
     tradeitemmodel companionitemmodel pickpocketitemmodel controllers savegamedialog
     recharge mode videowidget backgroundimage itemwidget screenfader debugwindow spellmodel spellview
     draganddrop timeadvancer jailscreen itemchargeview keyboardnavigation textcolours statswatcher
+    postprocessorhud
     )
 
 add_openmw_dir (mwdialogue
@@ -55,6 +58,13 @@ add_openmw_dir (mwscript
     animationextensions transformationextensions consoleextensions userextensions
     )
 
+add_openmw_dir (mwlua
+    luamanagerimp object worldview userdataserializer eventqueue
+    luabindings localscripts playerscripts objectbindings cellbindings
+    camerabindings uibindings inputbindings nearbybindings postprocessingbindings stats debugbindings
+    types/types types/door types/actor types/container types/weapon types/npc types/creature types/activator types/book types/lockpick types/probe types/apparatus types/potion types/ingredient types/misc types/repair
+    )
+
 add_openmw_dir (mwsound
     soundmanagerimp openal_output ffmpeg_decoder sound sound_buffer sound_decoder sound_output
     loudness movieaudiofactory alext efx efx-presets regionsoundselector watersoundupdater volumesettings
@@ -65,9 +75,9 @@ add_openmw_dir (mwworld
     containerstore actiontalk actiontake manualref player cellvisitors failedaction
     cells localscripts customdata inventorystore ptr actionopen actionread actionharvest
     actionequip timestamp actionalchemy cellstore actionapply actioneat
-    store esmstore recordcmp fallback actionrepair actionsoulgem livecellref actiondoor
+    store esmstore fallback actionrepair actionsoulgem livecellref actiondoor
     contentloader esmloader actiontrap cellreflist cellref weather projectilemanager
-    cellpreloader datetimemanager
+    cellpreloader datetimemanager groundcoverstore magiceffects
     )
 
 add_openmw_dir (mwphysics
@@ -85,9 +95,9 @@ add_openmw_dir (mwmechanics
     mechanicsmanagerimp stat creaturestats magiceffects movement actorutil spelllist
     drawstate spells activespells npcstats aipackage aisequence aipursue alchemy aiwander aitravel aifollow aiavoiddoor aibreathe
     aicast aiescort aiface aiactivate aicombat recharge repair enchanting pathfinding pathgrid security spellcasting spellresistance
-    disease pickpocket levelledlist combat steering obstacle autocalcspell difficultyscaling aicombataction actor summoning
-    character actors objects aistate trading weaponpriority spellpriority weapontype spellutil tickableeffects
-    spellabsorption linkedeffects
+    disease pickpocket levelledlist combat steering obstacle autocalcspell difficultyscaling aicombataction summoning
+    character actors objects aistate trading weaponpriority spellpriority weapontype spellutil
+    spelleffects
     )
 
 add_openmw_dir (mwstate
@@ -216,6 +226,32 @@ if(OSG_STATIC)
     target_link_options(openmw_osg_plugins INTERFACE ${_opts})
     target_link_libraries(tes3mp openmw_osg_plugins)
 
+if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.16 AND MSVC)
+    target_precompile_headers(tes3mp PRIVATE
+        <boost/filesystem.hpp>
+        <boost/program_options/options_description.hpp>
+        <sol/sol.hpp>
+
+        <osg/StateSet>
+        <osg/Node>
+        <osg/Drawable>
+        <osg/Camera>
+
+        <osgViewer/Viewer>
+
+        <MyGUI_Widget.h>
+
+        <algorithm>
+        <filesystem>
+        <fstream>
+        <functional>
+        <memory>
+        <string>
+        <string_view>
+        <vector>
+    )
+endif()
+
     if(OPENMW_USE_SYSTEM_OSG)
         # OSG plugin pkgconfig files are missing these dependencies.
         # https://github.com/openscenegraph/OpenSceneGraph/issues/1052
@@ -243,8 +279,7 @@ endif()
 if(APPLE)
     set(BUNDLE_RESOURCES_DIR "${APP_BUNDLE_DIR}/Contents/Resources")
 
-    set(OPENMW_MYGUI_FILES_ROOT ${BUNDLE_RESOURCES_DIR})
-    set(OPENMW_SHADERS_ROOT ${BUNDLE_RESOURCES_DIR})
+    set(OPENMW_RESOURCES_ROOT ${BUNDLE_RESOURCES_DIR})
 
     add_subdirectory(../../files/ ${CMAKE_CURRENT_BINARY_DIR}/files)
 
@@ -261,9 +296,12 @@ if(APPLE)
     target_link_libraries(tes3mp ${COCOA_FRAMEWORK} ${IOKIT_FRAMEWORK})
 
     if (FFmpeg_FOUND)
-        find_library(COREVIDEO_FRAMEWORK CoreVideo)
-        find_library(VDA_FRAMEWORK VideoDecodeAcceleration)
-        target_link_libraries(tes3mp z ${COREVIDEO_FRAMEWORK} ${VDA_FRAMEWORK})
+        target_link_libraries(openmw z)
+        target_link_options(openmw PRIVATE "LINKER:SHELL:-framework CoreVideo"
+                                           "LINKER:SHELL:-framework CoreMedia"
+                                           "LINKER:SHELL:-framework VideoToolbox"
+                                           "LINKER:SHELL:-framework AudioToolbox"
+                                           "LINKER:SHELL:-framework VideoDecodeAcceleration")
     endif()
 endif(APPLE)
 
