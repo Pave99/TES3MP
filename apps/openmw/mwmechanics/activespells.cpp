@@ -1,10 +1,16 @@
 #include "activespells.hpp"
 
+#include <optional>
+
+#include <components/debug/debuglog.hpp>
+
 #include <components/misc/rng.hpp>
 #include <components/misc/stringops.hpp>
+#include <components/misc/resourcehelpers.hpp>
 
-#include <components/esm/loadmgef.hpp>
+#include <components/esm3/loadmgef.hpp>
 
+#include <components/settings/settings.hpp>
 /*
     Start of tes3mp addition
 
@@ -20,11 +26,56 @@
 /*
     End of tes3mp addition
 */
+#include "creaturestats.hpp"
+#include "spellcasting.hpp"
+#include "spelleffects.hpp"
 
 #include "../mwbase/environment.hpp"
 #include "../mwbase/world.hpp"
 
+#include "../mwrender/animation.hpp"
+
 #include "../mwworld/esmstore.hpp"
+#include "../mwworld/class.hpp"
+#include "../mwworld/inventorystore.hpp"
+
+namespace
+{
+    bool merge(std::vector<ESM::ActiveEffect>& present, const std::vector<ESM::ActiveEffect>& queued)
+    {
+        // Can't merge if we already have an effect with the same effect index
+        auto problem = std::find_if(queued.begin(), queued.end(), [&] (const auto& qEffect)
+        {
+            return std::find_if(present.begin(), present.end(), [&] (const auto& pEffect) { return pEffect.mEffectIndex == qEffect.mEffectIndex; }) != present.end();
+        });
+        if(problem != queued.end())
+            return false;
+        present.insert(present.end(), queued.begin(), queued.end());
+        return true;
+    }
+
+    void addEffects(std::vector<ESM::ActiveEffect>& effects, const ESM::EffectList& list, bool ignoreResistances = false)
+    {
+        int currentEffectIndex = 0;
+        for(const auto& enam : list.mList)
+        {
+            ESM::ActiveEffect effect;
+            effect.mEffectId = enam.mEffectID;
+            effect.mArg = MWMechanics::EffectKey(enam).mArg;
+            effect.mMagnitude = 0.f;
+            effect.mMinMagnitude = enam.mMagnMin;
+            effect.mMaxMagnitude = enam.mMagnMax;
+            effect.mEffectIndex = currentEffectIndex++;
+            effect.mFlags = ESM::ActiveEffect::Flag_None;
+            if(ignoreResistances)
+                effect.mFlags |= ESM::ActiveEffect::Flag_Ignore_Resistances;
+            effect.mDuration = -1;
+            effect.mTimeLeft = -1;
+            effects.emplace_back(effect);
+        }
+    }
+}
+
 
 namespace MWMechanics
 {

@@ -1221,6 +1221,13 @@ namespace MWGui
             return markerSize * std::sqrt(agregatedWeight);  //we want to see agregated object
         return agregatedWeight ? 0 : markerSize; //we want to see only original markers (i.e. non agregated)
     }
+	
+	void MapWindow::resizeGlobalMap()
+    {
+        mGlobalMap->setCanvasSize(mGlobalMapRender->getWidth() * mGlobalMapZoom, mGlobalMapRender->getHeight() * mGlobalMapZoom);
+        mGlobalMapImage->setSize(mGlobalMapRender->getWidth() * mGlobalMapZoom, mGlobalMapRender->getHeight() * mGlobalMapZoom);
+    }
+	
     /*
         Start of tes3mp addition
 
@@ -1234,7 +1241,14 @@ namespace MWGui
     /*
         End of tes3mp addition
     */
-
+	
+    void MapWindow::worldPosToGlobalMapImageSpace(float x, float y, float& imageX, float& imageY) const
+    {
+        mGlobalMapRender->worldPosToImageSpace(x, y, imageX, imageY);
+        imageX *= mGlobalMapZoom;
+        imageY *= mGlobalMapZoom;
+    }
+	
     void MapWindow::updateCustomMarkers()
     {
         LocalMapBase::updateCustomMarkers();

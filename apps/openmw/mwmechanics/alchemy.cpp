@@ -9,10 +9,10 @@
 
 #include <components/misc/rng.hpp>
 
-#include <components/esm/loadskil.hpp>
-#include <components/esm/loadappa.hpp>
-#include <components/esm/loadgmst.hpp>
-#include <components/esm/loadmgef.hpp>
+#include <components/esm3/loadskil.hpp>
+#include <components/esm3/loadappa.hpp>
+#include <components/esm3/loadgmst.hpp>
+#include <components/esm3/loadmgef.hpp>
 
 /*
     Start of tes3mp addition
@@ -313,7 +313,8 @@ void MWMechanics::Alchemy::addPotion (const std::string& name)
 
     newRecord.mName = name;
 
-    int index = Misc::Rng::rollDice(6);
+    auto& prng = MWBase::Environment::get().getWorld()->getPrng();
+    int index = Misc::Rng::rollDice(6, prng);
     assert (index>=0 && index<6);
 
     static const char *meshes[] = { "standard", "bargain", "cheap", "fresh", "exclusive", "quality" };
@@ -333,9 +334,7 @@ void MWMechanics::Alchemy::addPotion (const std::string& name)
     /*
     const ESM::Potion* record = getRecord(newRecord);
     if (!record)
-    {
-        record = MWBase::Environment::get().getWorld()->createRecord(newRecord);
-    }
+        record = MWBase::Environment::get().getWorld()->createRecord (newRecord);
 
     mAlchemist.getClass().getContainerStore (mAlchemist).add (record->mId, 1, mAlchemist);
     */
@@ -608,8 +607,8 @@ MWMechanics::Alchemy::Result MWMechanics::Alchemy::createSingle ()
         removeIngredients();
         return Result_RandomFailure;
     }
-
-    if (getAlchemyFactor() < Misc::Rng::roll0to99())
+    auto& prng = MWBase::Environment::get().getWorld()->getPrng();
+    if (getAlchemyFactor() < Misc::Rng::roll0to99(prng))
     {
         removeIngredients();
         return Result_RandomFailure;
