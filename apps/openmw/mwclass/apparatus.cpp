@@ -1,5 +1,6 @@
 #include "apparatus.hpp"
 
+#include <MyGUI_TextIterator.h>
 /*
     Start of tes3mp addition
 
@@ -12,7 +13,7 @@
     End of tes3mp addition
 */
 
-#include <components/esm/loadappa.hpp>
+#include <components/esm3/loadappa.hpp>
 
 #include "../mwbase/environment.hpp"
 #include "../mwbase/windowmanager.hpp"
@@ -28,8 +29,14 @@
 
 #include "../mwgui/tooltips.hpp"
 
+#include "classmodel.hpp"
+
 namespace MWClass
 {
+    Apparatus::Apparatus()
+        : MWWorld::RegisteredClass<Apparatus>(ESM::Apparatus::sRecordId)
+    {
+    }
 
     void Apparatus::insertObjectRendering (const MWWorld::Ptr& ptr, const std::string& model, MWRender::RenderingInterface& renderingInterface) const
     {
@@ -38,7 +45,7 @@ namespace MWClass
         }
     }
 
-    void Apparatus::insertObject(const MWWorld::Ptr& ptr, const std::string& model, MWPhysics::PhysicsSystem& physics) const
+     void Apparatus::insertObject(const MWWorld::Ptr& ptr, const std::string& model, MWPhysics::PhysicsSystem& physics) const
     {
         // TODO: add option somewhere to enable collision for placeable objects
 
@@ -66,13 +73,7 @@ namespace MWClass
 
     std::string Apparatus::getModel(const MWWorld::ConstPtr &ptr) const
     {
-        const MWWorld::LiveCellRef<ESM::Apparatus> *ref = ptr.get<ESM::Apparatus>();
-
-        const std::string &model = ref->mBase->mModel;
-        if (!model.empty()) {
-            return "meshes\\" + model;
-        }
-        return "";
+        return getClassModel<ESM::Apparatus>(ptr);
     }
 
     std::string Apparatus::getName (const MWWorld::ConstPtr& ptr) const
@@ -83,7 +84,7 @@ namespace MWClass
         return !name.empty() ? name : ref->mBase->mId;
     }
 
-    std::shared_ptr<MWWorld::Action> Apparatus::activate (const MWWorld::Ptr& ptr,
+    std::unique_ptr<MWWorld::Action> Apparatus::activate (const MWWorld::Ptr& ptr,
         const MWWorld::Ptr& actor) const
     {
         return defaultItemActivate(ptr, actor);
@@ -101,13 +102,6 @@ namespace MWClass
         const MWWorld::LiveCellRef<ESM::Apparatus> *ref = ptr.get<ESM::Apparatus>();
 
         return ref->mBase->mData.mValue;
-    }
-
-    void Apparatus::registerSelf()
-    {
-        std::shared_ptr<Class> instance (new Apparatus);
-
-        registerClass (typeid (ESM::Apparatus).name(), instance);
     }
 
     std::string Apparatus::getUpSoundId (const MWWorld::ConstPtr& ptr) const
@@ -149,9 +143,9 @@ namespace MWClass
         return info;
     }
 
-    std::shared_ptr<MWWorld::Action> Apparatus::use (const MWWorld::Ptr& ptr, bool force) const
+    std::unique_ptr<MWWorld::Action> Apparatus::use (const MWWorld::Ptr& ptr, bool force) const
     {
-        return std::shared_ptr<MWWorld::Action>(new MWWorld::ActionAlchemy(force));
+        return std::make_unique<MWWorld::ActionAlchemy>(force);
     }
 
     MWWorld::Ptr Apparatus::copyToCellImpl(const MWWorld::ConstPtr &ptr, MWWorld::CellStore &cell) const
