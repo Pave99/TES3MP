@@ -20,12 +20,12 @@ void Manager::clear()
     mChangedSettings.clear();
 }
 
-std::string Manager::load(const Files::ConfigurationManager& cfgMgr, bool loadEditorSettings))
+std::string Manager::load(const Files::ConfigurationManager& cfgMgr, bool loadEditorSettings)
 {
     SettingsFileParser parser;
     const std::vector<boost::filesystem::path>& paths = cfgMgr.getActiveConfigPaths();
     if (paths.empty())
-        throw std::runtime_error("No config dirs! ConfigurationManager::readConfiguration must be called first.");
+    throw std::runtime_error("No config dirs! ConfigurationManager::readConfiguration must be called first.");
 
     // Create file name strings for either the engine or the editor.
     std::string defaultSettingsFile;
@@ -45,7 +45,7 @@ std::string Manager::load(const Files::ConfigurationManager& cfgMgr, bool loadEd
     // Create the settings manager and load default settings file.
     const std::string defaultsBin = (paths.front() / defaultSettingsFile).string();
     if (!boost::filesystem::exists(defaultsBin))
-        throw std::runtime_error ("No default settings file found! Make sure the file \"" + defaultSettingsFile + "\" was properly installed.");
+    throw std::runtime_error("No default settings file found! Make sure the file \"" + defaultSettingsFile + "\" was properly installed.");
     parser.loadSettingsFile(defaultsBin, mDefaultSettings, true, false);
 
     // Load "settings.cfg" or "openmw-cs.cfg" from every config dir except the last one as additional default settings.
@@ -59,11 +59,10 @@ std::string Manager::load(const Files::ConfigurationManager& cfgMgr, bool loadEd
     // Load "settings.cfg" or "openmw-cs.cfg" from the last config dir as user settings. This path will be used to save modified settings.
     std::string settingspath = (paths.back() / userSettingsFile).string();
     if (boost::filesystem::exists(settingspath))
-        parser.loadSettingsFile(settingspath, mUserSettings, false, false);
+    parser.loadSettingsFile(settingspath, mUserSettings, false, false);
 
     return settingspath;
-
-
+}
 
 
 

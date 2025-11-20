@@ -422,7 +422,7 @@ namespace SceneUtil
     private:
         size_t mIndex;
         std::vector<osg::ref_ptr<osg::Light>> mLights;
-
+    };
 
     struct StateSetGenerator
     {

@@ -119,6 +119,15 @@ namespace Debug
                 while (lineSize < msg.size() && msg[lineSize - 1] != '\n')
                     lineSize++;
                 writeImpl(prefix, prefixSize, level);
+                /*
+                Start of tes3mp change (major)
+
+                Don't use these timestamps, as TES3MP has its own
+                */
+                //writeImpl(prefix, prefixSize, level);
+                /*
+                End of tes3mp change (major)
+                */
                 writeImpl(msg.data(), lineSize, level);
                 if (logListener)
                     logListener(level, std::string_view(prefix, prefixSize), std::string_view(msg.data(), lineSize));
@@ -139,30 +148,6 @@ namespace Debug
             }
 
             return NoLevel;
-        }
-        */
-        /*
-            End of tes3mp change (major)
-        */
-
-        while (!msg.empty())
-        {
-            if (msg[0] == 0)
-                break;
-            size_t lineSize = 1;
-            while (lineSize < msg.size() && msg[lineSize - 1] != '\n')
-                lineSize++;
-            /*
-                Start of tes3mp change (major)
-
-                Don't use these timestamps, as TES3MP has its own
-            */
-            //writeImpl(prefix, prefixSize, level);
-            /*
-                End of tes3mp change (major)
-            */
-            writeImpl(msg.data(), lineSize, level);
-            msg = msg.substr(lineSize);
         }
 
         static void fillCurrentDebugLevel()
