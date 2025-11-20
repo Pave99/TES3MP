@@ -18,7 +18,7 @@ endif()
 # for boost_root, remove if cmake version is >= 3.12
 if(POLICY CMP0074)
 	cmake_policy(SET CMP0074 NEW)
-
+endif()
 # to link with freetype library
 if(POLICY CMP0079)
     cmake_policy(SET CMP0079 NEW)
@@ -27,6 +27,7 @@ endif()
 # for find_package(Boost). We use new behaviour because the boost version is newer than 1.70.
 if(POLICY CMP0167)
 	cmake_policy(SET CMP0167 NEW)
+endif()
 
 # don't add /W3 flag by default for MSVC
 if(POLICY CMP0092)
