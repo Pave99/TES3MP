@@ -276,13 +276,14 @@ namespace MWGui
         Allow the completion of a drag and drop from elsewhere in the code
     */
     virtual void finishDragDrop();
+
     /*
         End of tes3mp addition
     */
 
     bool getWorldMouseOver() override;
 
-    float getScalingFactor() override;
+    float getScalingFactor() const override;
 
     bool toggleFogOfWar() override;
     bool toggleFullHelp() override; ///< show extra info in item tooltips (owner, script)

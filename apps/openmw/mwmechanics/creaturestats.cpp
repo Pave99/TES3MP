@@ -747,22 +747,4 @@ namespace MWMechanics
         End of tes3mp addition
     */
 
-    std::map<std::string, CorprusStats> &CreatureStats::getCorprusSpells()
-    {
-        return mCorprusSpells;
-    }
-
-    void CreatureStats::addCorprusSpell(const std::string& sourceId, CorprusStats& stats)
-    {
-        mCorprusSpells[sourceId] = stats;
-    }
-
-    void CreatureStats::removeCorprusSpell(const std::string& sourceId)
-    {
-        auto corprusIt = mCorprusSpells.find(sourceId);
-        if (corprusIt != mCorprusSpells.end())
-        {
-            mCorprusSpells.erase(corprusIt);
-        }
-    }
 }

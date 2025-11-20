@@ -135,10 +135,7 @@ namespace MWGui
         */
 
         // We should not worsen corprus when in prison
-        for (auto& spell : player.getClass().getCreatureStats(player).getCorprusSpells())
-        {
-            spell.second.mNextWorsening += mDays * 24;
-        }
+        player.getClass().getCreatureStats(player).getActiveSpells().skipWorsenings(mDays * 24);
 
         std::set<int> skills;
         for (int day=0; day<mDays; ++day)

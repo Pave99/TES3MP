@@ -9,7 +9,7 @@
 #include <string_view>
 #include <deque>
 
-#include <components/esm/cellid.hpp>
+#include <components/esm3/cellid.hpp>
 #include <components/misc/rng.hpp>
 #include <components/misc/span.hpp>
 
@@ -18,7 +18,7 @@
 
     Include additional headers for multiplayer purposes
 */
-#include <components/esm/variant.hpp>
+#include <components/esm3/variant.hpp>
 /*
     End of tes3mp addition
 */
@@ -210,7 +210,7 @@ namespace MWBase
                 End of tes3mp addition
             */
 
-	    virtual void setGlobalInt(std::string_view name, int value) = 0;
+	        virtual void setGlobalInt(std::string_view name, int value) = 0;
             ///< Set value independently from real type.
 
             virtual void setGlobalFloat(std::string_view name, float value) = 0;
@@ -341,7 +341,6 @@ namespace MWBase
 
             virtual int getCurrentWeather() const = 0;
             virtual int getNextWeather() const = 0;
-            virtual int getCurrentWeather() const = 0;
             virtual float getWeatherTransition() const = 0;
 
             virtual unsigned int getNightDayMode() const = 0;

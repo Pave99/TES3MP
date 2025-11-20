@@ -117,7 +117,6 @@ namespace MWDialogue
             void questionAnswered (int answer, ResponseCallback* callback) override;
 
             void persuade (int type, ResponseCallback* callback) override;
-
             /// @note Controlled by an option, gets discarded when dialogue ends by default
             void applyBarterDispositionChange (int delta) override;
 

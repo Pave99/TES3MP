@@ -290,14 +290,13 @@ namespace MWWorld
                 Make it possible to check whether global variables exist and to create
                 new ones
             */
-            bool hasGlobal(std::string_view name);
+            bool hasGlobal(const std::string& name);
 
-            void createGlobal(std::string_view name, ESM::VarType varType);
+            void createGlobal(const std::string& name, ESM::VarType varType);
             /*
                 End of tes3mp addition
             */
 
-            void setGlobalInt (const std::string& name, int value) override;
             void setGlobalInt(std::string_view name, int value) override;
             ///< Set value independently from real type.
 

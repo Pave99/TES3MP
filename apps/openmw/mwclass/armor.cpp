@@ -1,5 +1,5 @@
 #include "armor.hpp"
-
+#include <MyGUI_TextIterator.h>
 /*
     Start of tes3mp addition
 

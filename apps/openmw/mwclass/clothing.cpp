@@ -156,13 +156,6 @@ namespace MWClass
         return ref->mBase->mData.mValue;
     }
 
-    void Clothing::registerSelf()
-    {
-        std::shared_ptr<Class> instance (new Clothing);
-
-        registerClass (typeid (ESM::Clothing).name(), instance);
-    }
-
     std::string Clothing::getUpSoundId (const MWWorld::ConstPtr& ptr) const
     {
         const MWWorld::LiveCellRef<ESM::Clothing> *ref = ptr.get<ESM::Clothing>();

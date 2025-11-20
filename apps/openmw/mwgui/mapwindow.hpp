@@ -14,6 +14,7 @@
 
 #include <components/esm3/custommarkerstate.hpp>
 #include <components/misc/constants.hpp>
+/*
     Declare GUIController here so we can use it for delegates
 */
 namespace mwmp

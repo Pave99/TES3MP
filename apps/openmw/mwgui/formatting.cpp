@@ -491,4 +491,3 @@ namespace MWGui::Formatting
             return mPaginator.getCurrentTop();
         }
     }
-}

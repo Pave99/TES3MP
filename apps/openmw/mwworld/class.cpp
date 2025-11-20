@@ -42,12 +42,12 @@ namespace MWWorld
 
     }
 
-    void Class::insertObject(const Ptr& ptr, const std::string& mesh, const osg::Quat& rotation, MWPhysics::PhysicsSystem& physics) const
+    void Class::insertObject(const Ptr& ptr, const std::string& mesh, MWPhysics::PhysicsSystem& physics) const
     {
 
     }
 
-    void Class::insertObjectPhysics(const Ptr& ptr, const std::string& mesh, const osg::Quat& rotation, MWPhysics::PhysicsSystem& physics) const
+    void Class::insertObjectPhysics(const Ptr& ptr, const std::string& mesh, MWPhysics::PhysicsSystem& physics) const
     {}
 
     bool Class::consume(const MWWorld::Ptr& consumable, const MWWorld::Ptr& actor) const

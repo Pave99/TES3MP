@@ -45,7 +45,7 @@ namespace MWMechanics
 
         Misc::TimerStatus updateEngageCombatTimer(float duration)
         {
-            return mEngageCombat.update(duration);
+            return mEngageCombat.update(duration, MWBase::Environment::get().getWorld()->getPrng());
         }
 
     private:

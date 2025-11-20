@@ -119,14 +119,14 @@ namespace MWDialogue
             {
                 // calculation of standard form for all hyperlinks
                 size_t asterisk_count = HyperTextParser::removePseudoAsterisks(topicId);
-                for(; asterisk_count > 0; --asterisk_count)
+                for (; asterisk_count > 0; --asterisk_count)
                     topicId.append("*");
 
                 topicId = mTranslationDataStorage.topicStandardForm(topicId);
             }
 
             topicIdList.push_back(topicId);
-        }
+
             /*
                 Start of tes3mp addition
 
@@ -137,7 +137,8 @@ namespace MWDialogue
             /*
                 End of tes3mp addition
             */
-        return topicIdList;
+            return topicIdList;
+        }
     }
 
     void DialogueManager::addTopicsFromText (const std::string& text)

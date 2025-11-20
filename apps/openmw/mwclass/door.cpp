@@ -76,9 +76,9 @@ namespace MWClass
         }
     }
 
-    void Door::insertObject(const MWWorld::Ptr& ptr, const std::string& model, const osg::Quat& rotation, MWPhysics::PhysicsSystem& physics) const
+    void Door::insertObject(const MWWorld::Ptr& ptr, const std::string& model, MWPhysics::PhysicsSystem& physics) const
     {
-        insertObjectPhysics(ptr, model, rotation, physics);
+        insertObjectPhysics(ptr, model, physics);
 
         // Resume the door's opening/closing animation if it wasn't finished
         if (ptr.getRefData().getCustomData())
@@ -91,9 +91,9 @@ namespace MWClass
         }
     }
 
-    void Door::insertObjectPhysics(const MWWorld::Ptr& ptr, const std::string& model, const osg::Quat& rotation, MWPhysics::PhysicsSystem& physics) const
+    void Door::insertObjectPhysics(const MWWorld::Ptr& ptr, const std::string& model, MWPhysics::PhysicsSystem& physics) const
     {
-        physics.addObject(ptr, model, rotation, MWPhysics::CollisionType_Door);
+        physics.addObject(ptr, model, MWPhysics::CollisionType_Door);
     }
 
     bool Door::isDoor() const
@@ -269,6 +269,7 @@ namespace MWClass
                         destinationCell = mwmp::Main::get().getNetworking()->getWorldstate()->destinationOverrides[destinationCell];
 
                     std::unique_ptr<MWWorld::Action> action = std::make_unique<MWWorld::ActionTeleport>(ptr.getCellRef().getDestCell(), ptr.getCellRef().getDoorDest(), true);
+                    /*
                         End of tes3mp change (major)
                     */
 

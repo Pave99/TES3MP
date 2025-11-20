@@ -13,7 +13,7 @@
     End of tes3mp addition
 */
 
-#include <components/esm/loadingr.hpp>
+#include <components/esm3/loadingr.hpp>
 
 #include "../mwbase/environment.hpp"
 #include "../mwbase/world.hpp"

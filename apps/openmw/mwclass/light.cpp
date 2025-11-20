@@ -41,13 +41,13 @@ namespace MWClass
         renderingInterface.getObjects().insertModel(ptr, model, true, !(ref->mBase->mData.mFlags & ESM::Light::OffDefault));
     }
 
-    void Light::insertObject(const MWWorld::Ptr& ptr, const std::string& model, const osg::Quat& rotation, MWPhysics::PhysicsSystem& physics) const
+    void Light::insertObject(const MWWorld::Ptr& ptr, const std::string& model, MWPhysics::PhysicsSystem& physics) const
     {
         MWWorld::LiveCellRef<ESM::Light> *ref =
             ptr.get<ESM::Light>();
         assert (ref->mBase != nullptr);
 
-        insertObjectPhysics(ptr, model, rotation, physics);
+        insertObjectPhysics(ptr, model, physics);
 
         if (!ref->mBase->mSound.empty() && !(ref->mBase->mData.mFlags & ESM::Light::OffDefault))
             MWBase::Environment::get().getSoundManager()->playSound3D(ptr, ref->mBase->mSound, 1.0, 1.0,
@@ -55,11 +55,11 @@ namespace MWClass
                                                                       MWSound::PlayMode::Loop);
     }
 
-    void Light::insertObjectPhysics(const MWWorld::Ptr& ptr, const std::string& model, const osg::Quat& rotation, MWPhysics::PhysicsSystem& physics) const
+    void Light::insertObjectPhysics(const MWWorld::Ptr& ptr, const std::string& model, MWPhysics::PhysicsSystem& physics) const
     {
         // TODO: add option somewhere to enable collision for placeable objects
         if ((ptr.get<ESM::Light>()->mBase->mData.mFlags & ESM::Light::Carry) == 0)
-            physics.addObject(ptr, model, rotation, MWPhysics::CollisionType_World);
+            physics.addObject(ptr, model, MWPhysics::CollisionType_World);
     }
 
     bool Light::useAnim() const

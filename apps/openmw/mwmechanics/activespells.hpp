@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 
-#include <components/esm/activespells.hpp>
+#include <components/esm3/activespells.hpp>
 
 #include "../mwworld/timestamp.hpp"
 
@@ -153,8 +153,6 @@ namespace MWMechanics
             void purgeCorprusDisease();
 
             const MagicEffects& getMagicEffects() const;
-
-            void visitEffectSources (MWMechanics::EffectSourceVisitor& visitor) const;
 
             /*
                 Start of tes3mp addition

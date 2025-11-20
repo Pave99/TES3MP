@@ -502,34 +502,17 @@ namespace MWPhysics
         return heightField->second.get();
     }
 
-    void PhysicsSystem::addObject (const MWWorld::Ptr& ptr, const std::string& mesh, osg::Quat rotation, int collisionType)
+    void PhysicsSystem::addObject(const MWWorld::Ptr& ptr, const std::string& mesh, int collisionType)
     {
-        if (ptr.mRef->mData.mPhysicsPostponed)
-            return;
         osg::ref_ptr<Resource::BulletShapeInstance> shapeInstance = mShapeManager->getInstance(mesh);
-        if (!shapeInstance || !shapeInstance->mCollisionShape)
+        if (!shapeInstance || !shapeInstance->getCollisionShape())
             return;
 
-        assert(!getObject(ptr));
-
-        // Override collision type based on shape content.
-        switch (shapeInstance->mVisualCollisionType)
-        {
-            case Resource::VisualCollisionType::None:
-                break;
-            case Resource::VisualCollisionType::Default:
-                collisionType = CollisionType_VisualOnly;
-                break;
-            case Resource::VisualCollisionType::Camera:
-                collisionType = CollisionType_CameraOnly;
-                break;
-        }
-
-        auto obj = std::make_shared<Object>(ptr, shapeInstance, rotation, collisionType, mTaskScheduler.get());
-        mObjects.emplace(ptr.mRef, obj);
+        auto obj = std::make_shared<Object>(ptr, shapeInstance, collisionType, mTaskScheduler.get());
+        mObjects.emplace(ptr, obj);
 
         if (obj->isAnimated())
-            mAnimatedObjects.emplace(obj.get(), false);
+            mAnimatedObjects.insert(obj.get());
     }
 
     void PhysicsSystem::remove(const MWWorld::Ptr &ptr)

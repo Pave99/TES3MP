@@ -120,14 +120,14 @@ namespace MWClass
         }
     }
 
-    void Container::insertObject(const MWWorld::Ptr& ptr, const std::string& model, const osg::Quat& rotation, MWPhysics::PhysicsSystem& physics) const
+    void Container::insertObject(const MWWorld::Ptr& ptr, const std::string& model, MWPhysics::PhysicsSystem& physics) const
     {
-        insertObjectPhysics(ptr, model, rotation, physics);
+        insertObjectPhysics(ptr, model, physics);
     }
 
-    void Container::insertObjectPhysics(const MWWorld::Ptr& ptr, const std::string& model, const osg::Quat& rotation, MWPhysics::PhysicsSystem& physics) const
+    void Container::insertObjectPhysics(const MWWorld::Ptr& ptr, const std::string& model, MWPhysics::PhysicsSystem& physics) const
     {
-        physics.addObject(ptr, model, rotation, MWPhysics::CollisionType_World);
+        physics.addObject(ptr, model, MWPhysics::CollisionType_World);
     }
 
     std::string Container::getModel(const MWWorld::ConstPtr &ptr) const

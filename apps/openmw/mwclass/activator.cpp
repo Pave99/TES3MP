@@ -45,14 +45,14 @@ namespace MWClass
         }
     }
 
-    void Activator::insertObject(const MWWorld::Ptr& ptr, const std::string& model, const osg::Quat& rotation, MWPhysics::PhysicsSystem& physics) const
+    void Activator::insertObject(const MWWorld::Ptr& ptr, const std::string& model, MWPhysics::PhysicsSystem& physics) const
     {
-        insertObjectPhysics(ptr, model, rotation, physics);
+        insertObjectPhysics(ptr, model, physics);
     }
 
-    void Activator::insertObjectPhysics(const MWWorld::Ptr& ptr, const std::string& model, const osg::Quat& rotation, MWPhysics::PhysicsSystem& physics) const
+    void Activator::insertObjectPhysics(const MWWorld::Ptr& ptr, const std::string& model, MWPhysics::PhysicsSystem& physics) const
     {
-        physics.addObject(ptr, model, rotation, MWPhysics::CollisionType_World);
+        physics.addObject(ptr, model, MWPhysics::CollisionType_World);
     }
 
     std::string Activator::getModel(const MWWorld::ConstPtr &ptr) const

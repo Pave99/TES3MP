@@ -558,15 +558,16 @@ namespace MWGui
                     End of tes3mp change (major)
                 */
                 mPtr = object;
+                // User clicked on an object. Restore focus to the console command line.
+                MWBase::Environment::get().getWindowManager()->setKeyFocusWidget(mCommandLine);
             }
-            // User clicked on an object. Restore focus to the console command line.
-            MWBase::Environment::get().getWindowManager()->setKeyFocusWidget(mCommandLine);
         }
         else
         {
             setTitle("#{sConsoleTitle}");
             mPtr = MWWorld::Ptr();
-        updateConsoleTitle();
+            updateConsoleTitle();
+        }
     }
 
     void Console::updateConsoleTitle()
@@ -578,7 +579,7 @@ namespace MWGui
             title.append(" (" + mPtr.getCellRef().getRefId() + ")");
         setTitle(title);
     }
-
+    /*
         Allow the direct setting of a console's Ptr, without the assumption that an object
         was clicked and that key focus should be restored to the console window, for console
         commands executed via server scripts
