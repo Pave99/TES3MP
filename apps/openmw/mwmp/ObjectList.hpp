@@ -76,7 +76,7 @@ namespace mwmp
         void addVideoPlay(std::string filename, bool allowSkipping);
         void addClientScriptLocal(const MWWorld::Ptr& ptr, int internalIndex, int value, mwmp::VARIABLE_TYPE variableType);
         void addClientScriptLocal(const MWWorld::Ptr& ptr, int internalIndex, float value);
-        void addScriptMemberShort(std::string refId, int index, int shortVal);
+        void addScriptMemberShort(std::string_view refId, int index, int shortVal);
 
         void sendObjectActivate();
         void sendObjectHit();

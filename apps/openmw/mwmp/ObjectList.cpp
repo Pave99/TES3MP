@@ -1475,7 +1475,7 @@ void ObjectList::addClientScriptLocal(const MWWorld::Ptr& ptr, int internalIndex
     addBaseObject(baseObject);
 }
 
-void ObjectList::addScriptMemberShort(std::string refId, int index, int shortVal)
+void ObjectList::addScriptMemberShort(std::string_view refId, int index, int shortVal)
 {
     /*
     mwmp::BaseObject baseObject;

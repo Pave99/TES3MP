@@ -531,7 +531,7 @@ void Worldstate::resetCells(std::vector<ESM::Cell>* cells)
     }
 }
 
-void Worldstate::sendClientGlobal(std::string varName, int value, mwmp::VARIABLE_TYPE variableType)
+void Worldstate::sendClientGlobal(std::string_view varName, int value, mwmp::VARIABLE_TYPE variableType)
 {
     clientGlobals.clear();
 
@@ -556,7 +556,7 @@ void Worldstate::sendClientGlobal(std::string varName, int value, mwmp::VARIABLE
     getNetworking()->getWorldstatePacket(ID_CLIENT_SCRIPT_GLOBAL)->Send();
 }
 
-void Worldstate::sendClientGlobal(std::string varName, float value)
+void Worldstate::sendClientGlobal(std::string_view varName, float value)
 {
     clientGlobals.clear();
 

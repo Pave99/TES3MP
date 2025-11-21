@@ -20,13 +20,13 @@ namespace fx
             mData.get<InvProjectionMatrix>() = osg::Matrixf::inverse(matrix);
         }
 
-        void setViewMatrix(const osg::Matrixf& matrix) 
-        { 
+        void setViewMatrix(const osg::Matrixf& matrix)
+        {
             mData.get<ViewMatrix>() = matrix;
             mData.get<InvViewMatrix>() = osg::Matrixf::inverse(matrix);
         }
 
-        void setPrevViewMatrix(const osg::Matrixf& matrix) { mData.get<PrevViewMatrix>() = matrix;}
+        void setPrevViewMatrix(const osg::Matrixf& matrix) { mData.get<PrevViewMatrix>() = matrix; }
 
         void setEyePos(const osg::Vec3f& pos) { mData.get<EyePos>() = osg::Vec4f(pos, 0.f); }
 
@@ -47,7 +47,7 @@ namespace fx
         void setResolution(const osg::Vec2f& size)
         {
             mData.get<Resolution>() = size;
-            mData.get<RcpResolution>() = {1.f / size.x(), 1.f / size.y()};
+            mData.get<RcpResolution>() = { 1.f / size.x(), 1.f / size.y() };
         }
 
         void setSunVis(float vis)
@@ -165,7 +165,7 @@ namespace fx
 
         struct IsInterior : std140::Bool { static constexpr std::string_view sName = "isInterior"; };
 
-        using UniformData = std140::UBO<
+        using UniformData = std140::UBO <
             ProjectionMatrix,
             InvProjectionMatrix,
             ViewMatrix,
@@ -195,7 +195,7 @@ namespace fx
             NextWeatherID,
             IsUnderwater,
             IsInterior
-        >;
+        > ;
 
         UniformData mData;
         bool mUseUBO;

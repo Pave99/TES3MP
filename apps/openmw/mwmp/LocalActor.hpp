@@ -6,6 +6,7 @@
 #include "../mwmechanics/activespells.hpp"
 #include "../mwworld/manualref.hpp"
 #include "../mwworld/timestamp.hpp"
+#include "../mwmechanics/drawstate.hpp"
 
 namespace mwmp
 {
@@ -50,8 +51,6 @@ namespace mwmp
 
         bool wasJumping;
         bool wasFlying;
-
-        MWMechanics::DrawState lastDrawState;
 
         MWMechanics::DynamicStat<float> oldHealth;
         MWMechanics::DynamicStat<float> oldMagicka;

@@ -10,6 +10,7 @@
 #include <components/esm3/quickkeys.hpp>
 #include <components/resource/resourcesystem.hpp>
 #include <components/misc/resourcehelpers.hpp>
+#include <components/esm/defs.hpp>
 
 /*
     Start of tes3mp addition
@@ -493,17 +494,24 @@ namespace MWGui
                     MWBase::Environment::get().getWindowManager()->useItem(item);
                 MWWorld::ConstContainerStoreIterator rightHand = store.getSlot(MWWorld::InventoryStore::Slot_CarriedRight);
                 // change draw state only if the item is in player's right hand
+
                 if (rightHand != store.end() && item == *rightHand)
                 {
                     MWBase::Environment::get().getWorld()->getPlayer().setDrawState(MWMechanics::DrawState::Weapon);
                 }
                 */
-
-                bool shouldDraw = isWeapon || isTool;
-                
+                bool shouldDraw;
+                if (item.getType() == ESM::RecNameInts::REC_WEAP || item.getType() == ESM::RecNameInts::REC_LOCK || item.getType() == ESM::RecNameInts::REC_PROB)
+                {
+                    shouldDraw = true;
+                }
+                else {
+                    shouldDraw = false;
+                }
+               
                 if (!store.isEquipped(item))
                 {
-                    mwmp::Main::get().getLocalPlayer()->sendItemUse(item, false, shouldDraw ? MWMechanics::DrawState_Weapon : MWMechanics::DrawState_Nothing);
+                    mwmp::Main::get().getLocalPlayer()->sendItemUse(item, false, shouldDraw ? static_cast<char>(MWMechanics::DrawState::Weapon) : static_cast<char>(MWMechanics::DrawState::Nothing));
                 }
                 /*
                     End of tes3mp change (major)
@@ -533,7 +541,7 @@ namespace MWGui
                 MWBase::Environment::get().getWorld()->getPlayer().setDrawState(MWMechanics::DrawState::Spell);
                 */
 
-                mwmp::Main::get().getLocalPlayer()->sendItemUse(item, true, MWMechanics::DrawState_Spell);
+                mwmp::Main::get().getLocalPlayer()->sendItemUse(item, true, static_cast<char>(MWMechanics::DrawState::Spell));
                 /*
                     End of tes3mp change (major)
                 */

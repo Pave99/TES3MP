@@ -536,4 +536,3 @@ namespace MWGui::Widgets
             assignWidget(mBarTextWidget, "BarText");
         }
     }
-}

@@ -29,7 +29,7 @@ namespace mwmp
         static void frame(float dt);
 
         static bool isValidPacketScript(std::string scriptId);
-        static bool isValidPacketGlobal(std::string globalId);
+        static bool isValidPacketGlobal(std::string_view globalId);
 
         static std::string getResDir();
 

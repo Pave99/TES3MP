@@ -1,4 +1,4 @@
-#include <components/esm/esmwriter.hpp>
+#include <components/esm3/esmwriter.hpp>
 #include <components/openmw-mp/TimedLog.hpp>
 #include <components/openmw-mp/Utils.hpp>
 
@@ -1859,7 +1859,7 @@ void LocalPlayer::sendSelectedSpell(const std::string& newSelectedSpellId)
     getNetworking()->getPlayerPacket(ID_PLAYER_MISCELLANEOUS)->Send();
 }
 
-void LocalPlayer::sendItemUse(const MWWorld::Ptr& itemPtr, bool itemMagicState, char currentDrawState)
+void LocalPlayer::sendItemUse(const MWWorld::Ptr& itemPtr, bool itemMagicState, MWMechanics::DrawState& drawstate)
 {
     usedItem.refId = itemPtr.getCellRef().getRefId();
     usedItem.count = itemPtr.getRefData().getCount();

@@ -424,6 +424,15 @@ namespace MWGui
         Send the LocalMapBase to our GUIController when updating player markers
     */
     void LocalMapBase::updatePlayerMarkers()
+    {
+        mwmp::Main::get().getGUIController()->updatePlayersMarkers(this);
+    }
+
+    /*
+    End of tes3mp addition
+    */
+
+
     void LocalMapBase::setActiveCell(const int x, const int y, bool interior)
     {
         if (x==mCurX && y==mCurY && mInterior==interior && !mChanged)
@@ -436,7 +445,7 @@ namespace MWGui
                 std::min(x, mCurX) + mCellDistance, std::min(y, mCurY) + mCellDistance
             };
 
-	    const MyGUI::IntRect activeGrid = createRect({ x, y }, Constants::CellGridRadius);
+            const MyGUI::IntRect activeGrid = createRect({ x, y }, Constants::CellGridRadius);
             const MyGUI::IntRect currentView = createRect({ x, y }, mCellDistance);
 
             mExteriorDoorMarkerWidgets.clear();
@@ -451,34 +460,6 @@ namespace MWGui
                     mExteriorDoorMarkerWidgets.insert(mExteriorDoorMarkerWidgets.end(), doors.begin(), doors.end());
             }
 
-        mwmp::Main::get().getGUIController()->updatePlayersMarkers(this);
-    }
-    /*
-        End of tes3mp addition
-    */
-
-        if (!interior && !(x == mCurX && y == mCurY))
-        {
-            const MyGUI::IntRect intersection = {
-                std::max(x, mCurX) - mCellDistance, std::max(y, mCurY) - mCellDistance,
-                std::min(x, mCurX) + mCellDistance, std::min(y, mCurY) + mCellDistance
-            };
-
-    /*
-        Start of tes3mp addition
-
-        Send the MapWindow to our GUIController when updating player markers
-    */
-    void MapWindow::updatePlayerMarkers()
-    {
-        LocalMapBase::updatePlayerMarkers();
-
-        mwmp::Main::get().getGUIController()->updateGlobalMapMarkerTooltips(this);
-    }
-    /*
-        End of tes3mp addition
-    */
-
             for (auto& widget : mDoorMarkersToRecycle)
                 widget->setVisible(false);
 
@@ -488,7 +469,6 @@ namespace MWGui
                     mLocalMapRender->removeExteriorCell(cell.mCellX, cell.mCellY);
             }
         }
-
         mCurX = x;
         mCurY = y;
         mInterior = interior;
@@ -1511,5 +1491,20 @@ namespace MWGui
             return true;
         return mLocalMapRender->isPositionExplored(nX, nY, cellX, cellY);
     }
+
+    /*
+    Start of tes3mp addition
+
+    Send the MapWindow to our GUIController when updating player markers
+*/
+    void MapWindow::updatePlayerMarkers()
+    {
+        LocalMapBase::updatePlayerMarkers();
+
+        mwmp::Main::get().getGUIController()->updateGlobalMapMarkerTooltips(this);
+    }
+    /*
+        End of tes3mp addition
+    */
 
 }

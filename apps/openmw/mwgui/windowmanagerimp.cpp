@@ -2312,7 +2312,7 @@ namespace MWGui
         End of tes3mp addition
     */
 
-       void WindowManager::printToConsole(const std::string& msg, std::string_view color)
+    void WindowManager::printToConsole(const std::string& msg, std::string_view color)
     {
         mConsole->print(msg, color);
     }
@@ -2320,7 +2320,7 @@ namespace MWGui
     void WindowManager::setConsoleMode(const std::string& mode)
     {
         mConsole->setConsoleMode(mode);
-
+    }
     void WindowManager::createCursors()
     {
         // FIXME: currently we do not scale cursor since it is not a MyGUI widget.

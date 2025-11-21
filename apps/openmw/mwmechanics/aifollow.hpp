@@ -15,7 +15,6 @@ namespace ESM::AiSequence
 {
     struct AiFollow;
 }
-}
 
 namespace MWMechanics
 {
