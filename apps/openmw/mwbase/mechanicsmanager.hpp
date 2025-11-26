@@ -247,7 +247,7 @@ namespace MWBase
 
                 Make it possible to set the attackingOrSpell state from elsewhere in the code
             */
-            virtual void setAttackingOrSpell(const MWWorld::Ptr &ptr, bool state) const = 0;
+            virtual void setAttackingOrSpell(bool state) const = 0;
             /*
                 End of tes3mp addition
             */

@@ -56,6 +56,7 @@ namespace MWWorld
         mCurrentCrimeId(-1),
         mPaidCrimeId(-1),
         mJumping(false)
+        
     {
         ESM::CellRef cellRef;
         cellRef.blank();

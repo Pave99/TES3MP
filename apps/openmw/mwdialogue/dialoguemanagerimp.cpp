@@ -137,8 +137,10 @@ namespace MWDialogue
             /*
                 End of tes3mp addition
             */
-            return topicIdList;
+            
         }
+
+        return topicIdList;
     }
 
     void DialogueManager::addTopicsFromText (const std::string& text)

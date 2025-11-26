@@ -730,17 +730,17 @@ namespace MWMechanics
         Make it possible to set a new actorId for summoned creatures, necessary for properly
         initializing them after syncing them across players
     */
-    void CreatureStats::setSummonedCreatureActorId(std::string refId, int actorId)
+    void CreatureStats::setSummonedCreatureActorId(int refId, int actorId)
     {
-        for (std::map<ESM::SummonKey, int>::iterator it = mSummonedCreatures.begin(); it != mSummonedCreatures.end(); )
+        auto range = mSummonedCreatures.equal_range(refId);
+
+        for (auto it = range.first; it != range.second; ++it)
         {
-            if (Misc::StringUtils::ciEqual(getSummonedCreature(it->first.mEffectId), refId) && it->second == -1)
+            if (it->second == -1)
             {
                 it->second = actorId;
                 break;
             }
-            else
-                ++it;
         }
     }
     /*

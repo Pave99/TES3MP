@@ -1922,9 +1922,9 @@ namespace MWMechanics
 
         Make it possible to set the attackingOrSpell state from elsewhere in the code
     */
-    void MechanicsManager::setAttackingOrSpell(const MWWorld::Ptr &ptr, bool state) const
+    void MechanicsManager::setAttackingOrSpell(bool state) const
     {
-        return mActors.setAttackingOrSpell(ptr, state);
+        return mActors.setAttackingOrSpell(state);
     }
     /*
         End of tes3mp addition

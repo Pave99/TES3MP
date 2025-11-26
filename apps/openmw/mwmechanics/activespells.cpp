@@ -459,8 +459,10 @@ namespace MWMechanics
                 {
 					auto params = *found;
 					mSpells.erase(found);
-					for(const auto& effect : params.mEffects)
-                    onMagicEffectRemoved(ptr, params, effect);
+                    for (const auto& effect : params.mEffects)
+                    {
+                        onMagicEffectRemoved(ptr, params, effect);
+                    }
                     return true;
                 }
             }

@@ -521,22 +521,25 @@ namespace MWScript
 
                         Only remove the spell if the target has it
                     */
-                    MWMechanics::Spells& spells = creatureStats.getSpells();
+                    MWMechanics::Spells& spells = creatureStats.getSpells());
 
                     if (!spells.hasSpell(id)) return;
                     /*
                         End of tes3mp change (major)
                     */
-                                        
+                    
+                    MWMechanics::MagicEffects& effects = creatureStats.getMagicEffects());
+
                     // The spell may have an instant effect which must be handled before the spell's removal.
-                    for (const auto& effect : creatureStats.getSpells().getMagicEffects())
+                    for (const auto& effect : effects)
                     {
                         if (effect.second.getMagnitude() <= 0)
                             continue;
                         MWMechanics::CastSpell cast(ptr, ptr);
-                        if (cast.applyInstantEffect(ptr, ptr, effect.first, effect.second.getMagnitude()))
-                            creatureStats.getSpells().purgeEffect(effect.first.mId);
+                        cast.inflict(ptr, ptr, effect.first, effect.second.getMagnitude()))
+                        effects.remove(effect.first.mId);
                     }
+                    
 
                     MWBase::Environment::get().getMechanicsManager()->restoreStatsAfterCorprus(ptr, id);
                     creatureStats.getSpells().remove (id);

@@ -64,6 +64,7 @@
 #include "actor.hpp"
 #include "summoning.hpp"
 #include "actorutil.hpp"
+#include "character.hpp"
 
 namespace
 {
@@ -1166,7 +1167,7 @@ namespace MWMechanics
                         creatureStats.getAiSequence().stopCombat();
                         creatureStats.setAttacked(false);
                         creatureStats.setAlarmed(false);
-                        creatureStats.setAiSetting(CreatureStats::AI_Fight, ptr.getClass().getBaseFightRating(ptr));
+                        creatureStats.setAiSetting(MWMechanics::AiSetting::Fight , ptr.getClass().getBaseFightRating(ptr));
 
                         npcStats.setCrimeId(-1);
                         npcStats.setCrimeTime(time(0));
@@ -1583,11 +1584,13 @@ namespace MWMechanics
                 */
                 if (isPlayer)
                 {
-                    bool state = MWBase::Environment::get().getWorld()->getPlayer().getAttackingOrSpell();
-                    DrawState_ dstate = player.getClass().getNpcStats(player).getDrawState();
-                    ctrl->setAttackingOrSpell(world->getPlayer().getAttackingOrSpell());
+                    CreatureStats& stats = player.getClass().getCreatureStats(player);
+                    bool state = stats.getAttackingOrSpell();
+                    DrawState dstate = player.getClass().getNpcStats(player).getDrawState();
+                    stats.setAttackingOrSpell(luaControls->mUse == 1);
+                    
 
-                    if (dstate == DrawState_Weapon)
+                    if (dstate == DrawState::Weapon)
                     {
                         mwmp::Attack *localAttack = MechanicsHelper::getLocalAttack(actor.getPtr());
 
@@ -1903,16 +1906,15 @@ namespace MWMechanics
                     /*
                         End of tes3mp change (major)
                     */
+
+                    // Play Death Music if it was the player dying
+                    MWBase::Environment::get().getSoundManager()->streamMusic("Special/MW_Death.mp3");
                 }
                 else
                 {
                     // NPC death animation is over, disable actor collision
                     MWBase::Environment::get().getWorld()->enableActorCollision(actor.getPtr(), false);
                 }
-
-                // Play Death Music if it was the player dying
-                if(iter->first == getPlayer())
-                    MWBase::Environment::get().getSoundManager()->streamMusic("Special/MW_Death.mp3");
             }
         }
     }
@@ -2137,7 +2139,7 @@ namespace MWMechanics
         End of tes3mp addition
     */
 
-    void Actors::forceStateUpdate(const MWWorld::Ptr & ptr)
+    void Actors::forceStateUpdate(const MWWorld::Ptr & ptr) const
     {
         const auto iter = mIndex.find(ptr.mRef);
         if (iter != mIndex.end())
@@ -2222,22 +2224,22 @@ namespace MWMechanics
                 Alternatively, if we're checking a DedicatedPlayer and the iteratedActor is a LocalPlayer or DedicatedPlayer
                 belonging to their alliedPlayers, include the iteratedActor in the actors siding with them
             */
-            if (actor == getPlayer() && mwmp::PlayerList::isDedicatedPlayer(iteratedActor))
+            if (actor.getPtr() == getPlayer() && mwmp::PlayerList::isDedicatedPlayer(iteratedActor))
             {
                 if (Utils::vectorContains(mwmp::Main::get().getLocalPlayer()->alliedPlayers, mwmp::PlayerList::getPlayer(iteratedActor)->guid))
                 {
                     list.push_back(iteratedActor);
                 }
             }
-            else if (mwmp::PlayerList::isDedicatedPlayer(actor))
+            else if (mwmp::PlayerList::isDedicatedPlayer(actor.getPtr()))
             {
                 if (iteratedActor == getPlayer() &&
-                    Utils::vectorContains(mwmp::PlayerList::getPlayer(actor)->alliedPlayers, mwmp::Main::get().getLocalPlayer()->guid))
+                    Utils::vectorContains(mwmp::PlayerList::getPlayer(actor.getPtr())->alliedPlayers, mwmp::Main::get().getLocalPlayer()->guid))
                 {
                     list.push_back(iteratedActor);
                 }
                 else if (mwmp::PlayerList::isDedicatedPlayer(iteratedActor) &&
-                    Utils::vectorContains(mwmp::PlayerList::getPlayer(actor)->alliedPlayers, mwmp::PlayerList::getPlayer(iteratedActor)->guid))
+                    Utils::vectorContains(mwmp::PlayerList::getPlayer(actor.getPtr())->alliedPlayers, mwmp::PlayerList::getPlayer(iteratedActor)->guid))
                 {
                     list.push_back(iteratedActor);
                 }
@@ -2484,15 +2486,18 @@ namespace MWMechanics
 
         Make it possible to set the attackingOrSpell state from elsewhere in the code
     */
-    void Actors::setAttackingOrSpell(const MWWorld::Ptr& ptr, bool state) const
+    void Actors::setAttackingOrSpell(bool state) const
     {
-	const auto it = mIndex.find(ptr.mRef);
+	/*    const auto it = mIndex.find(ptr.mRef);
         if (it == mIndex.end())
             return;
 
         CharacterController* ctrl = it->second->getCharacterController();
 
         ctrl->setAttackingOrSpell(state);
+
+        */
+
     }
     /*
         End of tes3mp addition

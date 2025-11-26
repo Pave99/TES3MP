@@ -244,7 +244,7 @@ namespace MWMechanics
             Make it possible to set a new actorId for summoned creatures, necessary for properly
             initializing them after syncing them across players
          */
-        void setSummonedCreatureActorId(std::string refId, int actorId);
+        void setSummonedCreatureActorId(int refId, int actorId);
         /*
             End of tes3mp addition
         */

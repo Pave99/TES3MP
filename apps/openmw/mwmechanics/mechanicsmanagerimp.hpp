@@ -203,7 +203,7 @@ namespace MWMechanics
 
                 Make it possible to set the attackingOrSpell state from elsewhere in the code
             */
-            virtual void setAttackingOrSpell(const MWWorld::Ptr &ptr, bool state) const override;
+            virtual void setAttackingOrSpell(bool state) const override;
             /*
                 End of tes3mp addition
             */
