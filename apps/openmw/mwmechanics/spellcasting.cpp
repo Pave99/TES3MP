@@ -200,8 +200,10 @@ namespace MWMechanics
             	{
                 // If player is attempting to cast a harmful spell on or is healing a living target, show the target's HP bar.
                 MWBase::Environment::get().getWindowManager()->setEnemy(target);
-            }
-
+                }
+                static const std::string schools[] = {
+                    "alteration", "conjuration", "destruction", "illusion", "mysticism", "restoration"
+                };
 
                 if (target.getClass().isActor() || magicEffect->mData.mFlags & ESM::MagicEffect::NoDuration)
                 {

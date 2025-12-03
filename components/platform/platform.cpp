@@ -10,6 +10,7 @@ namespace Platform {
         // Increase limit for open files at the stream I/O level, see
         // https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/setmaxstdio?view=msvc-170#remarks
         _setmaxstdio(8192);
+        #undef DrawState
 #else
         // No-op on any other platform.
 #endif

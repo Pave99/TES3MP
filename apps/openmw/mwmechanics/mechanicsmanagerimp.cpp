@@ -1,5 +1,4 @@
 #include "mechanicsmanagerimp.hpp"
-
 #include <osg/Stats>
 
 #include <components/misc/rng.hpp>
@@ -31,6 +30,8 @@
 #include "../mwworld/player.hpp"
 #include "../mwworld/ptr.hpp"
 
+#undef DrawState
+
 #include "../mwbase/environment.hpp"
 #include "../mwbase/statemanager.hpp"
 #include "../mwbase/world.hpp"
@@ -45,6 +46,8 @@
 #include "actorutil.hpp"
 #include "combat.hpp"
 #include "actor.hpp"
+
+
 
 namespace
 {

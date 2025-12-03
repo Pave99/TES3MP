@@ -523,7 +523,8 @@ namespace MWScript
                     */
                     MWMechanics::Spells& spells = creatureStats.getSpells());
 
-                    if (!spells.hasSpell(id)) return;
+                    if (!spells.hasSpell(id))
+                        return;
                     /*
                         End of tes3mp change (major)
                     */

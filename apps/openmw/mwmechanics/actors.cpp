@@ -1,5 +1,4 @@
 #include "actors.hpp"
-
 #include <optional>
 
 #include <components/esm3/esmreader.hpp>
@@ -37,6 +36,8 @@
 #include "../mwworld/actionequip.hpp"
 #include "../mwworld/player.hpp"
 
+#include "drawstate.hpp"
+
 #include "../mwbase/world.hpp"
 #include "../mwbase/environment.hpp"
 #include "../mwbase/windowmanager.hpp"
@@ -65,6 +66,7 @@
 #include "summoning.hpp"
 #include "actorutil.hpp"
 #include "character.hpp"
+
 
 namespace
 {
@@ -1667,8 +1669,8 @@ namespace MWMechanics
 
                         Allow AI processing for LocalActors and partially for DedicatedActors
                     */
-                    bool isLocalActor = mwmp::Main::get().getCellController()->isLocalActor(actor);
-                    bool isDedicatedActor = mwmp::Main::get().getCellController()->isDedicatedActor(actor);
+                    bool isLocalActor = mwmp::Main::get().getCellController()->isLocalActor(actor.getPtr());
+                    bool isDedicatedActor = mwmp::Main::get().getCellController()->isDedicatedActor(actor.getPtr());
 
                     if (inProcessingRange && (aiActive || isLocalActor || isDedicatedActor))
                     {

@@ -26,6 +26,7 @@
 
 #include "actions.hpp"
 
+
 namespace MWInput
 {
     static const int sFakeDeviceId = 1; //As we only support one controller at a time, use a fake deviceID so we don't lose bindings when switching controllers

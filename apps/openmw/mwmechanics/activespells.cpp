@@ -446,28 +446,25 @@ namespace MWMechanics
 	Returns a boolean that indicates whether the corresponding spell was found
     */
 	
-    bool ActiveSpells::removeSpellByTimestamp(const MWWorld::Ptr& ptr, const std::string& id, MWWorld::TimeStamp timestamp)
+    bool ActiveSpells::removeSpellByTimestamp(const MWWorld::Ptr& ptr, const std::string& id, MWWorld::TimeStamp timestamp, const ActiveSpellParams& params)
     {
 		
-		auto found = std::find_if(mSpells.begin(), mSpells.end(), [&] (const auto& existing))
-		
-        for (auto spellIt = mSpells.begin(); spellIt != mSpells.end();)
-        {
-            if (spellIt-> == id)
+        auto found = std::find_if(mSpells.begin(), mSpells.end(), [&](const auto& existing)
             {
-                if (spellIt->mTimeStamp == timestamp)
-                {
-					auto params = *found;
-					mSpells.erase(found);
-                    for (const auto& effect : params.mEffects)
-                    {
-                        onMagicEffectRemoved(ptr, params, effect);
-                    }
-                    return true;
-                }
-            }
-        }
+                return params.mId == existing.mId && params.mCasterActorId == existing.mCasterActorId && params.mSlot == existing.mSlot && params.mTimeStamp == existing.mTimeStamp;
+            });
 
+        if (found != mSpells.end())
+        {
+            auto foundparams = *found;
+            for (const auto& effect : found->getEffects())
+            {
+                onMagicEffectRemoved(ptr, foundparams, effect);
+            }
+            mSpells.erase(found);
+            return true;
+        }
+           
         return false;    
     }
 	

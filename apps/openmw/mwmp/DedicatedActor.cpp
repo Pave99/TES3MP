@@ -1,5 +1,6 @@
 #include <components/openmw-mp/TimedLog.hpp>
 
+
 #include "../mwbase/environment.hpp"
 #include "../mwbase/soundmanager.hpp"
 #include "../mwbase/windowmanager.hpp"
@@ -16,6 +17,7 @@
 #include "../mwmechanics/creaturestats.hpp"
 #include "../mwmechanics/mechanicsmanagerimp.hpp"
 #include "../mwmechanics/movement.hpp"
+#include "../mwmechanics/drawstate.hpp"
 
 #include "../mwrender/animation.hpp"
 
@@ -29,12 +31,13 @@
 #include "Main.hpp"
 #include "CellController.hpp"
 #include "MechanicsHelper.hpp"
+#undef DrawState
 
 using namespace mwmp;
 
 DedicatedActor::DedicatedActor()
 {
-    drawState = MWMechanics::DrawState_::DrawState_Nothing;
+    drawState = static_cast<char>(MWMechanics::DrawState::Nothing);
     movementFlags = 0;
     animation.groupname = "";
     sound = "";

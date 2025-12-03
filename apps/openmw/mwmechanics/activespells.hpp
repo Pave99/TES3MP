@@ -174,7 +174,7 @@ namespace MWMechanics
         int getActorId() const;
         void setActorId(int actorId);
         void addTes3mpSpell(const ActiveSpellParams& params, const MWWorld::TimeStamp timestamp, bool sendPacket, bool stack);
-        bool removeSpellByTimestamp(const MWWorld::Ptr& ptr, const std::string& id, MWWorld::TimeStamp timestamp);
+        bool removeSpellByTimestamp(const MWWorld::Ptr& ptr, const std::string& id, MWWorld::TimeStamp timestamp, const ActiveSpellParams& params);
         void purgeEffectByArg(const MWWorld::Ptr& ptr, short effectId, int effectArg);
         float getEffectDuration(short effectId, std::string sourceId);
 		/*

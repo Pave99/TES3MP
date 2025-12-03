@@ -103,6 +103,15 @@
 #include "esmloader.hpp"
 #include "cellutils.hpp"
 
+#ifdef near
+#undef near
+#endif
+
+#ifdef far
+#undef far
+#endif
+
+
 namespace MWWorld
 {
     struct GameContentLoader : public ContentLoader
@@ -663,11 +672,6 @@ namespace MWWorld
     /*
         End of tes3mp addition
     */
-
-    std::vector<ESM::ESMReader>& World::getEsmReader()
-    {
-        return mEsm;
-    }
 
     LocalScripts& World::getLocalScripts()
     {
@@ -2959,13 +2963,14 @@ namespace MWWorld
 
         Make it possible to unload a cell from elsewhere
     */
-    void World::unloadCell(const ESM::Cell& cell)
+    void World::unloadCell(CellStore* cell)
     {
         if (isCellActive(cell))
         {
             const Scene::CellStoreCollection& activeCells = mWorldScene->getActiveCells();
-            mwmp::CellController *cellController = mwmp::Main::get().getCellController();
-            mWorldScene->unloadCell(activeCells.find(cellController->getCellStore(cell)));
+            if (activeCells.find(cell) == activeCells.end())
+                return;
+            mWorldScene->unloadCell(cell);
         }
     }
     /*
@@ -2986,7 +2991,7 @@ namespace MWWorld
             // Ignore a placeholder interior that a player may currently be in
             if ((*it)->getCell()->isExterior() || !Misc::StringUtils::ciEqual((*it)->getCell()->getDescription(), RecordHelper::getPlaceholderInteriorCellName()))
             {
-                mWorldScene->unloadCell(it);
+                mWorldScene->unloadCell(*it);
             }
         }
     }

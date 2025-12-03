@@ -267,8 +267,6 @@ namespace MWWorld
                 End of tes3mp addition
             */
 
-            std::vector<ESM::ESMReader>& getEsmReader() override;
-
             LocalScripts& getLocalScripts() override;
 
             bool hasCellChanged() const override;
@@ -724,7 +722,7 @@ namespace MWWorld
 
                 Make it possible to unload a cell from elsewhere
             */
-            void unloadCell(const ESM::Cell& cell) override;
+            void unloadCell(CellStore* cell);
             /*
                 End of tes3mp addition
             */

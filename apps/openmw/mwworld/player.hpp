@@ -13,6 +13,9 @@
 #include <components/esm/attr.hpp>
 #include <components/esm3/loadnpc.hpp>
 
+
+
+
 namespace ESM
 {
     class ESMWriter;

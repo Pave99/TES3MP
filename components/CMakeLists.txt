@@ -239,7 +239,7 @@ IF(NOT WIN32 AND NOT APPLE)
 ENDIF()
 add_component_dir (files
     linuxpath androidpath windowspath macospath fixedpath multidircollection collections configurationmanager
-    constrainedfilestream memorystream hash configfileparser openfile constrainedfilestreambuf
+    constrainedfilestream memorystream hash configfileparser openfile constrainedfilestreambuf escape
     )
 
 add_component_dir (compiler

@@ -135,6 +135,14 @@
 #include "keyboardnavigation.hpp"
 #include "resourceskin.hpp"
 
+#ifdef near
+#undef near
+#endif
+
+#ifdef far
+#undef far
+#endif
+
 namespace MWGui
 {
     WindowManager::WindowManager(

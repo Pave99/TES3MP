@@ -32,6 +32,8 @@
 #include "../mwbase/windowmanager.hpp"
 #include "../mwbase/mechanicsmanager.hpp"
 
+#undef DrawState
+#include "../mwmechanics/drawstate.hpp"
 #include "../mwmechanics/movement.hpp"
 #include "../mwmechanics/npcstats.hpp"
 #include "../mwmechanics/spellutil.hpp"
@@ -42,6 +44,7 @@
 #include "cellstore.hpp"
 #include "class.hpp"
 #include "ptr.hpp"
+
 
 namespace MWWorld
 {

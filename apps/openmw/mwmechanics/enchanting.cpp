@@ -112,7 +112,7 @@ namespace MWMechanics
             enchantmentPtr = MWBase::Environment::get().getWorld()->createRecord (enchantment);
 
         // Apply the enchantment
-        std::string newItemId = mOldItemPtr.getClass().applyEnchantment(mOldItemPtr, enchantmentPtr->mId, getGemCharge(), mNewItemName);
+       // std::string newItemId = mOldItemPtr.getClass().applyEnchantment(mOldItemPtr, enchantmentPtr->mId, getGemCharge(), mNewItemName);
 
         /*
             Start of tes3mp change (major)
